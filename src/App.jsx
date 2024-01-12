@@ -1,12 +1,37 @@
 import NewProject from "./components/NewProject";
-import Sidebar from "./components/ProjectsSidebar";
+import ProjectSidebar from "./components/ProjectsSidebar";
+import NoProjectSelected from "./components/NoProjectSelected";
+import { useState } from "react";
 
 function App() {
+  const [projectsState, setProjectsState] = useState({
+    selectedProjecId: undefined,
+    projects: [],
+  });
+
+  function handleStartAddProject() {
+    setProjectsState(prevState => {
+      return {
+        ...prevState,
+        selectedProjecId: null,
+
+      };
+    });
+  }
+
+  let content;
+
+  if (projectsState.selectedProjecId === null) {
+    content = <NewProject />
+  } else if (projectsState.selectedProjecId === undefined) {
+    content = <NoProjectSelected onStartAddProject={handleStartAddProject} />
+  }
+
+
   return (
     <main className="h-screen my-8 flex gap-8">
-      <Sidebar />
-      <NewProject />
-      <h1 className="my-8 text-center text-5xl font-bold">Learning React</h1>
+      <ProjectSidebar onStartAddProject={handleStartAddProject} />
+      {content}
     </main>
   );
 }
